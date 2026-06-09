@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hermes + Gemma 4 | The Unbottlenecked Stack</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Outfit:wght@700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0b0c10;
+            --surface-color: rgba(31, 33, 42, 0.6);
+            --border-color: rgba(255, 255, 255, 0.05);
+            --text-main: #ffffff;
+            --text-muted: #8b8d98;
+            --accent-gradient: linear-gradient(135deg, #00f2fe 0%, #4facfe 100%);
+            --accent-glow: rgba(79, 172, 254, 0.4);
+            --card-gradient: linear-gradient(180deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.01) 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.6;
+            overflow-x: hidden;
+            background-image: radial-gradient(circle at 50% -20%, #1a1c29 0%, var(--bg-color) 70%);
+        }
+
+        /* Nav */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 2rem 5%;
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.5px;
+        }
+
+        /* Hero */
+        .hero {
+            min-height: 80vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 0 2rem;
+            position: relative;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            background: var(--accent-glow);
+            filter: blur(150px);
+            border-radius: 50%;
+            z-index: -1;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation: pulse 6s infinite alternate ease-in-out;
+        }
+
+        @keyframes pulse {
+            0% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
+            100% { transform: translate(-50%, -50%) scale(1.2); opacity: 0.8; }
+        }
+
+        .badge {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-bottom: 2rem;
+            color: #4facfe;
+            animation: slideDown 0.8s ease-out;
+        }
+
+        h1 {
+            font-family: 'Outfit', sans-serif;
+            font-size: clamp(3rem, 6vw, 6rem);
+            line-height: 1.1;
+            letter-spacing: -2px;
+            margin-bottom: 1.5rem;
+            animation: fadeUp 1s ease-out;
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, #ffffff 0%, #a3a5ae 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            color: var(--text-muted);
+            max-width: 600px;
+            margin-bottom: 3rem;
+            animation: fadeUp 1.2s ease-out;
+        }
+
+        /* Architecture Grid */
+        .architecture {
+            padding: 5rem 5%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            text-align: center;
+            font-family: 'Outfit', sans-serif;
+            font-size: 2.5rem;
+            margin-bottom: 4rem;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .card {
+            background: var(--surface-color);
+            background-image: var(--card-gradient);
+            border: 1px solid var(--border-color);
+            border-radius: 24px;
+            padding: 2.5rem;
+            backdrop-filter: blur(20px);
+            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--accent-gradient);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+            border-color: rgba(255,255,255,0.1);
+        }
+
+        .card:hover::before {
+            opacity: 1;
+        }
+
+        .card-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .card h3 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .card p {
+            color: var(--text-muted);
+            font-size: 1rem;
+        }
+
+        /* Flow Diagram */
+        .flow-section {
+            background: rgba(0,0,0,0.3);
+            border-top: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
+            padding: 6rem 5%;
+            text-align: center;
+        }
+
+        .flow-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .flow-node {
+            background: var(--surface-color);
+            border: 1px solid var(--border-color);
+            padding: 1.5rem 3rem;
+            border-radius: 12px;
+            font-weight: 600;
+            font-family: 'Outfit', sans-serif;
+            position: relative;
+        }
+
+        .flow-node.highlight {
+            border-color: #4facfe;
+            box-shadow: 0 0 20px rgba(79, 172, 254, 0.2);
+        }
+
+        .flow-arrow {
+            width: 2px;
+            height: 40px;
+            background: var(--accent-gradient);
+        }
+
+        /* Animations */
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 3rem;
+            color: var(--text-muted);
+            border-top: 1px solid var(--border-color);
+            font-size: 0.875rem;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">Hermes x Gemma</div>
+        <div style="font-size: 0.875rem; color: var(--text-muted);">Unbottlenecked Local Execution Stack</div>
+    </header>
+
+    <section class="hero">
+        <div class="badge">Architecture V1</div>
+        <h1 class="gradient-text">Unleashing<br>Local Intelligence</h1>
+        <p>A deep dive into how we bypassed API bottlenecks to permanently fuse the Hermes Agent with the uncensored Gemma 4 12B model at 65,536 tokens.</p>
+    </section>
+
+    <section class="architecture">
+        <h2 class="section-title">The Engineering Challenge</h2>
+        <div class="grid">
+            <div class="card">
+                <div class="card-icon">🚧</div>
+                <h3>The API Bottleneck</h3>
+                <p>Hermes interfaces with Ollama via an OpenAI-compatible endpoint. This abstraction layer inherently drops crucial native parameters like `num_ctx`, silently forcing massive contextual tasks into a suffocating 4,096-token window.</p>
+            </div>
+            <div class="card">
+                <div class="card-icon">🧠</div>
+                <h3>The Alias Architecture</h3>
+                <p>Instead of modifying the Hermes codebase, we engineered a native `Modelfile` alias. This permanently embeds absolute maximum parameters directly into the model container, completely bypassing the API abstraction drop-off.</p>
+            </div>
+            <div class="card">
+                <div class="card-icon">⚡</div>
+                <h3>Infinite Generation</h3>
+                <p>By defining `PARAMETER num_predict -1` and heavily leaning into your 64GB System RAM + 12GB VRAM via `num_gpu 999`, we unlocked infinite generation. The model now dictates its own stop sequences without artificial constraints.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="flow-section">
+        <h2 class="section-title">The Data Pipeline</h2>
+        <p style="color: var(--text-muted); max-width: 600px; margin: 0 auto;">How your queries traverse the local stack seamlessly without losing context overhead.</p>
+        
+        <div class="flow-container">
+            <div class="flow-node">Hermes Agent / Windows Desktop App</div>
+            <div class="flow-arrow"></div>
+            <div class="flow-node">OpenAI-Compatible Endpoint (/v1/chat/completions)</div>
+            <div class="flow-arrow"></div>
+            <div class="flow-node highlight">hermes-gemma-4-12b (Unbottlenecked Alias)</div>
+            <div class="flow-arrow"></div>
+            <div class="flow-node">Local Hardware Execution (VRAM -> System RAM Spillover)</div>
+        </div>
+    </section>
+
+    <footer>
+        <p>Built for the Antigravity Stack. Executed locally.</p>
+    </footer>
+
+    <script>
+        // Subtle entrance observer for cards
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry, index) => {
+                if (entry.isIntersecting) {
+                    entry.target.style.animation = `fadeUp 0.6s ease-out ${index * 0.1}s forwards`;
+                    entry.target.style.opacity = '0';
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.card').forEach(card => observer.observe(card));
+    </script>
+</body>
+</html>

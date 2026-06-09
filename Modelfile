@@ -1,0 +1,4 @@
+FROM igorls/gemma-4-12B-it-heretic-GGUF:latest
+PARAMETER num_ctx 65536
+PARAMETER num_predict -1
+PARAMETER num_gpu 999

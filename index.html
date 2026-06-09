@@ -3,21 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zero to Hero: The 30-Step Hermes Epic</title>
+    <title>The Proper Fix: Local AI Context Management</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&family=Outfit:wght@700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg: #050505;
-            --surface: rgba(20, 20, 25, 0.7);
-            --border: rgba(255, 255, 255, 0.08);
-            --text: #f0f0f0;
-            --muted: #a0a0a5;
-            --primary: #00f2fe;
-            --secondary: #4facfe;
-            --glow: rgba(0, 242, 254, 0.3);
-            --code-bg: #0d0d12;
+            --bg: #0d0d12;
+            --surface: #15151a;
+            --border: #2a2a35;
+            --text-main: #e2e2e8;
+            --text-muted: #9494a0;
+            --primary: #4facfe;
+            --accent: #00f2fe;
+            --danger: #ff4a4a;
+            --success: #2ea043;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -25,653 +25,249 @@
         body {
             font-family: 'Inter', sans-serif;
             background-color: var(--bg);
-            color: var(--text);
-            line-height: 1.7;
-            overflow-x: hidden;
-            background-image: 
-                radial-gradient(circle at 15% 50%, rgba(79, 172, 254, 0.08), transparent 25%),
-                radial-gradient(circle at 85% 30%, rgba(0, 242, 254, 0.08), transparent 25%);
+            color: var(--text-main);
+            line-height: 1.6;
         }
 
-        .hero {
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
+        header {
+            padding: 4rem 2rem;
             text-align: center;
-            padding: 2rem;
-            position: relative;
-        }
-
-        .hero::before {
-            content: '';
-            position: absolute;
-            width: 80vw;
-            height: 80vw;
-            max-width: 800px;
-            max-height: 800px;
-            background: radial-gradient(circle, var(--glow) 0%, transparent 70%);
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            z-index: -1;
-            animation: pulse 8s infinite alternate ease-in-out;
-        }
-
-        @keyframes pulse {
-            0% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
-            100% { transform: translate(-50%, -50%) scale(1.1); opacity: 0.8; }
-        }
-
-        .hero-badge {
-            background: rgba(0, 242, 254, 0.1);
-            border: 1px solid var(--primary);
-            color: var(--primary);
-            padding: 0.5rem 1.5rem;
-            border-radius: 30px;
-            font-weight: 700;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            font-size: 0.8rem;
-            margin-bottom: 2rem;
-            box-shadow: 0 0 20px var(--glow);
+            border-bottom: 1px solid var(--border);
+            background: linear-gradient(180deg, rgba(21, 21, 26, 0.8) 0%, var(--bg) 100%);
         }
 
         h1 {
-            font-family: 'Outfit', sans-serif;
-            font-size: clamp(3rem, 8vw, 6rem);
-            font-weight: 900;
-            line-height: 1;
-            letter-spacing: -2px;
-            margin-bottom: 1.5rem;
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
             background: linear-gradient(to right, #fff, #a0a0a5);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            letter-spacing: -1px;
         }
 
-        .hero p {
-            font-size: clamp(1.1rem, 2vw, 1.5rem);
-            color: var(--muted);
-            max-width: 700px;
-        }
-
-        .timeline-wrapper {
-            max-width: 1000px;
+        header p {
+            color: var(--text-muted);
+            font-size: 1.2rem;
+            max-width: 600px;
             margin: 0 auto;
-            padding: 5rem 2rem;
-            position: relative;
         }
 
-        .timeline-wrapper::before {
-            content: '';
-            position: absolute;
-            top: 5rem;
-            bottom: 5rem;
-            left: 50px;
-            width: 2px;
-            background: linear-gradient(to bottom, transparent, var(--primary), var(--secondary), transparent);
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
         }
 
-        .step {
-            position: relative;
-            padding-left: 100px;
-            margin-bottom: 6rem;
-            opacity: 0;
-            transform: translateY(40px);
-            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        section {
+            margin-bottom: 4rem;
         }
 
-        .step.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .step::before {
-            content: '';
-            position: absolute;
-            left: 41px;
-            top: 20px;
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            background: var(--bg);
-            border: 3px solid var(--primary);
-            box-shadow: 0 0 15px var(--primary);
-            z-index: 2;
-            transition: all 0.5s ease;
-        }
-
-        .step.visible::before {
-            background: var(--primary);
-        }
-
-        .step-number {
-            position: absolute;
-            left: -10px;
-            top: 5px;
-            font-family: 'Outfit', sans-serif;
-            font-size: 2.5rem;
-            font-weight: 900;
-            color: rgba(255, 255, 255, 0.1);
-            line-height: 1;
-            transition: color 0.5s ease;
-        }
-
-        .step.visible .step-number {
-            color: rgba(0, 242, 254, 0.3);
-        }
-
-        .card {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: 24px;
-            padding: 3rem;
-            backdrop-filter: blur(20px);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
-            position: relative;
-            overflow: hidden;
-            transition: transform 0.3s ease, border-color 0.3s ease;
-        }
-        
-        .card:hover {
-            transform: scale(1.02);
-            border-color: rgba(255,255,255,0.2);
-        }
-
-        .card::after {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0; height: 1px;
-            background: linear-gradient(to right, transparent, var(--primary), transparent);
-            opacity: 0.5;
-        }
-
-        .card h2 {
-            font-family: 'Outfit', sans-serif;
-            font-size: 2rem;
-            margin-bottom: 0.5rem;
+        h2 {
+            font-size: 1.75rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
             color: #fff;
         }
-        
-        .story-text {
-            color: var(--secondary);
-            font-style: italic;
-            font-size: 1rem;
-            margin-bottom: 1.5rem;
-            border-left: 3px solid var(--secondary);
-            padding-left: 1rem;
+
+        h3 {
+            font-size: 1.25rem;
+            margin: 2rem 0 1rem;
+            color: #fff;
         }
 
-        .card p.instruction {
+        p {
             margin-bottom: 1.5rem;
-            font-size: 1.1rem;
-            color: #ddd;
         }
 
-        .code-window {
-            background: var(--code-bg);
+        .callout {
+            background: rgba(255, 74, 74, 0.1);
+            border-left: 4px solid var(--danger);
+            padding: 1.5rem;
+            border-radius: 0 8px 8px 0;
+            margin-bottom: 2rem;
+        }
+
+        .callout h4 {
+            color: var(--danger);
+            margin-bottom: 0.5rem;
+        }
+
+        .code-block {
+            background: #000;
             border: 1px solid var(--border);
-            border-radius: 12px;
-            margin: 1.5rem 0 0 0;
+            border-radius: 8px;
             overflow: hidden;
+            margin-bottom: 2rem;
         }
 
         .code-header {
-            background: rgba(255,255,255,0.03);
-            padding: 0.8rem 1.2rem;
-            border-bottom: 1px solid var(--border);
+            background: #1a1a24;
+            padding: 0.5rem 1rem;
             font-family: 'JetBrains Mono', monospace;
-            font-size: 0.8rem;
-            color: var(--muted);
-            display: flex;
-            align-items: center;
-        }
-
-        .code-header::before {
-            content: '•••';
-            color: #555;
-            letter-spacing: 4px;
-            font-size: 1.2rem;
-            margin-right: 1rem;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            border-bottom: 1px solid var(--border);
         }
 
         pre {
             padding: 1.5rem;
             overflow-x: auto;
             font-family: 'JetBrains Mono', monospace;
-            font-size: 0.95rem;
-            color: #e0e0e0;
+            font-size: 0.9rem;
+            color: #c9d1d9;
         }
 
-        @media (max-width: 768px) {
-            .timeline-wrapper::before { left: 30px; }
-            .step { padding-left: 60px; }
-            .step::before { left: 21px; }
-            .step-number { display: none; }
-            .card { padding: 2rem; }
-            h1 { font-size: 2.5rem; }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 2rem;
+            background: var(--surface);
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+
+        th, td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        th {
+            background: #1a1a24;
+            font-weight: 600;
+            color: #fff;
+        }
+
+        ul {
+            margin-bottom: 1.5rem;
+            padding-left: 1.5rem;
+        }
+
+        li {
+            margin-bottom: 0.5rem;
         }
 
         footer {
             text-align: center;
-            padding: 4rem 2rem;
+            padding: 3rem;
+            color: var(--text-muted);
             border-top: 1px solid var(--border);
-            color: var(--muted);
-            font-family: 'JetBrains Mono', monospace;
             font-size: 0.9rem;
         }
+
     </style>
 </head>
 <body>
 
-    <section class="hero">
-        <div class="hero-badge">30-Step Masterclass</div>
-        <h1>Zero to Hero:<br>The Antigravity Epic</h1>
-        <p>A completely unbroken, hand-holding masterclass. 30 detailed steps narrating exactly how to shatter the Ollama context ceiling and permanently fuse Gemma 4 to the Hermes Agent.</p>
-        <p style="font-size: 0.9rem; margin-top: 2rem; opacity: 0.5;">Scroll to begin the journey ↓</p>
-    </section>
+    <header>
+        <h1>The Proper Fix</h1>
+        <p>A realistic, sane guide to configuring context length in Ollama and Hermes Agent without crashing your system or falling for fake hype.</p>
+    </header>
 
-    <div class="timeline-wrapper">
+    <div class="container">
 
-        <div class="step">
-            <div class="step-number">01</div>
-            <div class="card">
-                <h2>The Awakening</h2>
-                <div class="story-text">Every hero begins with realizing they are trapped. You’ve noticed Hermes hitting invisible walls when analyzing massive codebases.</div>
-                <p class="instruction">Open your system terminal. We are about to bypass the 4K token limit imposed by standard APIs.</p>
-                
+        <section>
+            <h2>🧠 The Reality Check</h2>
+            <div class="callout">
+                <h4>Myth vs. Reality</h4>
+                <p>Before we start, it's important to know that a model can't magically use more context than it was designed for. Each model has a built-in "architectural maximum," like Llama 3.1's 128K tokens. Setting a <code>num_ctx</code> value higher than this ceiling will just be ignored, and the model will silently work at its true limit. Furthermore, infinite generation (<code>num_predict -1</code>) is dangerous advice that can lead to runaway compute.</p>
             </div>
-        </div>
+        </section>
 
-        <div class="step">
-            <div class="step-number">02</div>
-            <div class="card">
-                <h2>Installing Ollama</h2>
-                <div class="story-text">Ollama is the engine that will run our intelligence locally, entirely off-grid.</div>
-                <p class="instruction">Download and install Ollama from ollama.com if you haven't already. Ensure the Ollama icon is running in your system tray.</p>
-                
-            </div>
-        </div>
+        <section>
+            <h2>🛠️ Step-by-Step Setup</h2>
+            <p>Here’s how to properly set up Hermes Agent to work with local models using Ollama, focusing on real-world configuration and sane context management.</p>
 
-        <div class="step">
-            <div class="step-number">03</div>
-            <div class="card">
-                <h2>Summoning Gemma 4</h2>
-                <div class="story-text">We need raw intelligence. We pull the uncensored, 12-Billion parameter Gemma 4 model directly to your machine.</div>
-                <p class="instruction">Run this command to download the base Heretic GGUF model into Ollama's local cache.</p>
-                
-                <div class="code-window">
-                    <div class="code-header">Terminal / Configuration</div>
-                    <pre>ollama pull igorls/gemma-4-12B-it-heretic-GGUF:latest</pre>
-                </div>
-            </div>
-        </div>
+            <h3>Step 1: Set Your Default Context Length in Ollama</h3>
+            <p>For a reliable baseline, the official Ollama documentation recommends setting a global default context length using the <code>OLLAMA_CONTEXT_LENGTH</code> environment variable.</p>
+            <ul>
+                <li><strong>On Windows:</strong> Quit Ollama (from the system tray), set a new environment variable named <code>OLLAMA_CONTEXT_LENGTH</code> to your desired value (e.g., 32768 for a 32K context), and then restart Ollama.</li>
+                <li><strong>On macOS/Linux:</strong> Use launchctl or systemctl to set the environment variable before starting the Ollama service.</li>
+            </ul>
 
-        <div class="step">
-            <div class="step-number">04</div>
-            <div class="card">
-                <h2>Verifying the Download</h2>
-                <div class="story-text">A quick check ensures the model has descended correctly into your local architecture.</div>
-                <p class="instruction">List your installed models to confirm it's ready for manipulation.</p>
-                
-                <div class="code-window">
-                    <div class="code-header">Terminal / Configuration</div>
-                    <pre>ollama list</pre>
-                </div>
-            </div>
-        </div>
+            <h3>Step 2: Create a Custom Modelfile</h3>
+            <p>If you need a consistent context for a specific task without messing with environment variables, you can bake it directly into a model alias.</p>
+            
+            <div class="code-block">
+                <div class="code-header">Terminal (bash)</div>
+                <pre># Create a new Modelfile
+cat > Modelfile << 'EOF'
+FROM llama3.1:8b  # Or pull your preferred model like "qwen2.5-coder:7b"
+PARAMETER num_ctx 32768 # Set your desired, sane context window here
+EOF
 
-        <div class="step">
-            <div class="step-number">05</div>
-            <div class="card">
-                <h2>Understanding the Bottleneck</h2>
-                <div class="story-text">Hermes talks to Ollama via an OpenAI endpoint. This endpoint strips context limits, aggressively capping generation to 4,096 tokens.</div>
-                <p class="instruction">Understand that changing Hermes settings won't fix this. We must manipulate the model at the source.</p>
-                
+# Build the new model alias
+ollama create my-longcontext-model -f ./Modelfile</pre>
             </div>
-        </div>
 
-        <div class="step">
-            <div class="step-number">06</div>
-            <div class="card">
-                <h2>The Modelfile Blueprint</h2>
-                <div class="story-text">To bypass the API, we create a genetic blueprint for a new model: a Modelfile.</div>
-                <p class="instruction">Open your desktop folder, right-click, create a new text document, and name it 'Modelfile'. Remove the '.txt' extension.</p>
-                
+            <h3>Step 3: Configure Hermes Agent Correctly</h3>
+            <p>Hermes Agent needs to be explicitly told to use your local Ollama instance and respect the exact context limits you established. Open your <code>~/.hermes/config.yaml</code> and define a custom provider.</p>
+            
+            <div class="code-block">
+                <div class="code-header">config.yaml</div>
+                <pre>custom_providers:
+  - name: "my_local_ollama"
+    base_url: "http://localhost:11434/v1"
+    api_key: "ollama" # Can be any non-empty string
+    models:
+      - id: "my-longcontext-model"
+        context_length: 32768 # Must match the num_ctx set in Ollama</pre>
             </div>
-        </div>
+            
+            <p>Set this as your active model via CLI: <code>hermes model set my_local_ollama:my-longcontext-model</code>.</p>
+        </section>
 
-        <div class="step">
-            <div class="step-number">07</div>
-            <div class="card">
-                <h2>Declaring the Base</h2>
-                <div class="story-text">Every blueprint needs a foundation. We tell the Modelfile to inherit everything from the Gemma model we just downloaded.</div>
-                <p class="instruction">Open the Modelfile in Notepad and paste the FROM declaration.</p>
-                
-                <div class="code-window">
-                    <div class="code-header">Terminal / Configuration</div>
-                    <pre>FROM igorls/gemma-4-12B-it-heretic-GGUF:latest</pre>
-                </div>
-            </div>
-        </div>
+        <section>
+            <h2>🎯 Hardware Limitations: A Real-World Roadmap</h2>
+            <p>Getting the technical steps right is only half the battle. The KV cache (the memory that stores the conversation history) grows alongside your context window. Setting a context length too high will cause Ollama to exceed your VRAM, forcing it to offload to slower system RAM or crash entirely.</p>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Total VRAM</th>
+                        <th>Recommended Context</th>
+                        <th>Reasoning</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>6–8 GB</strong></td>
+                        <td>4,096 - 8,192 tokens</td>
+                        <td>Prioritizes stable model loading and generation. Limited VRAM can't handle larger contexts without crashing.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>10–12 GB</strong></td>
+                        <td>16,384 - 32,768 tokens</td>
+                        <td>Balances decent context length with model weights. Good for many coding and analysis tasks.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>16-24+ GB</strong></td>
+                        <td>32,768 - 64,000+ tokens</td>
+                        <td>Enables handling of very large documents or extensive codebases. VRAM requirement grows quickly.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
 
-        <div class="step">
-            <div class="step-number">08</div>
-            <div class="card">
-                <h2>Shattering the Context Wall</h2>
-                <div class="story-text">We force the absolute maximum context window. This allows the model to remember an entire book of code at once.</div>
-                <p class="instruction">Add the num_ctx parameter to hardcode 65,536 tokens.</p>
-                
-                <div class="code-window">
-                    <div class="code-header">Terminal / Configuration</div>
-                    <pre>PARAMETER num_ctx 65536</pre>
-                </div>
-            </div>
-        </div>
-
-        <div class="step">
-            <div class="step-number">09</div>
-            <div class="card">
-                <h2>Infinite Generation</h2>
-                <div class="story-text">Standard models artificially stop talking to save compute. We disable this entirely so it can generate massive scripts in one breath.</div>
-                <p class="instruction">Add the num_predict parameter set to -1 (infinite).</p>
-                
-                <div class="code-window">
-                    <div class="code-header">Terminal / Configuration</div>
-                    <pre>PARAMETER num_predict -1</pre>
-                </div>
-            </div>
-        </div>
-
-        <div class="step">
-            <div class="step-number">10</div>
-            <div class="card">
-                <h2>Hardware Saturation</h2>
-                <div class="story-text">We command Ollama to push as many neural layers as possible into your 12GB VRAM before safely spilling into your 64GB System RAM.</div>
-                <p class="instruction">Add the num_gpu parameter set to 999 to guarantee maximum GPU offloading.</p>
-                
-                <div class="code-window">
-                    <div class="code-header">Terminal / Configuration</div>
-                    <pre>PARAMETER num_gpu 999</pre>
-                </div>
-            </div>
-        </div>
-
-        <div class="step">
-            <div class="step-number">11</div>
-            <div class="card">
-                <h2>Reviewing the Blueprint</h2>
-                <div class="story-text">Before we compile, we must ensure our genetic modifications are perfect.</div>
-                <p class="instruction">Your complete Modelfile should look exactly like this. Save and close Notepad.</p>
-                
-                <div class="code-window">
-                    <div class="code-header">Terminal / Configuration</div>
-                    <pre>FROM igorls/gemma-4-12B-it-heretic-GGUF:latest
-PARAMETER num_ctx 65536
-PARAMETER num_predict -1
-PARAMETER num_gpu 999</pre>
-                </div>
-            </div>
-        </div>
-
-        <div class="step">
-            <div class="step-number">12</div>
-            <div class="card">
-                <h2>Compiling the Alias</h2>
-                <div class="story-text">We fuse the blueprint with the base model, giving birth to our limitless variant.</div>
-                <p class="instruction">Open your terminal in the same folder as the Modelfile and run the create command to build 'hermes-gemma-4-12b'.</p>
-                
-                <div class="code-window">
-                    <div class="code-header">Terminal / Configuration</div>
-                    <pre>ollama create hermes-gemma-4-12b -f ./Modelfile</pre>
-                </div>
-            </div>
-        </div>
-
-        <div class="step">
-            <div class="step-number">13</div>
-            <div class="card">
-                <h2>Watching the Build</h2>
-                <div class="story-text">Ollama reads your constraints, recalculates the layers, and writes the new manifest to disk.</div>
-                <p class="instruction">Wait a few seconds for the terminal to say 'success'. It doesn't redownload the model, it just creates a lightweight alias pointer.</p>
-                
-            </div>
-        </div>
-
-        <div class="step">
-            <div class="step-number">14</div>
-            <div class="card">
-                <h2>Validating the Unbottlenecked Model</h2>
-                <div class="story-text">We confirm our new alias is alive and recognized by the system.</div>
-                <p class="instruction">Run the list command again to see your newly minted creation.</p>
-                
-                <div class="code-window">
-                    <div class="code-header">Terminal / Configuration</div>
-                    <pre>ollama list | findstr hermes-gemma</pre>
-                </div>
-            </div>
-        </div>
-
-        <div class="step">
-            <div class="step-number">15</div>
-            <div class="card">
-                <h2>Opening Hermes</h2>
-                <div class="story-text">Now that the engine is built, we turn our attention to the vehicle: The Hermes Agent.</div>
-                <p class="instruction">Navigate to the Hermes application data directory to locate the core configuration.</p>
-                
-                <div class="code-window">
-                    <div class="code-header">Terminal / Configuration</div>
-                    <pre>cd %LOCALAPPDATA%\hermes</pre>
-                </div>
-            </div>
-        </div>
-
-        <div class="step">
-            <div class="step-number">16</div>
-            <div class="card">
-                <h2>Locating config.yaml</h2>
-                <div class="story-text">The config.yaml file is the brain stem of the Hermes UI and CLI.</div>
-                <p class="instruction">Open config.yaml in any text editor.</p>
-                
-            </div>
-        </div>
-
-        <div class="step">
-            <div class="step-number">17</div>
-            <div class="card">
-                <h2>Mapping the Primary Model</h2>
-                <div class="story-text">We must explicitly tell Hermes to abandon its default API model and point to our unbottlenecked local alias.</div>
-                <p class="instruction">Find the 'model:' section and update the 'default' key.</p>
-                
-                <div class="code-window">
-                    <div class="code-header">Terminal / Configuration</div>
-                    <pre>model:
-  default: hermes-gemma-4-12b
-  provider: ollama</pre>
-                </div>
-            </div>
-        </div>
-
-        <div class="step">
-            <div class="step-number">18</div>
-            <div class="card">
-                <h2>Setting the Local API Path</h2>
-                <div class="story-text">Hermes still communicates via API, but now it points locally.</div>
-                <p class="instruction">Ensure the base_url points to your local Ollama port.</p>
-                
-                <div class="code-window">
-                    <div class="code-header">Terminal / Configuration</div>
-                    <pre>  base_url: http://localhost:11434/v1</pre>
-                </div>
-            </div>
-        </div>
-
-        <div class="step">
-            <div class="step-number">19</div>
-            <div class="card">
-                <h2>Injecting Dummy Keys</h2>
-                <div class="story-text">Ollama doesn't need an API key, but the OpenAI endpoint format expects one to not crash.</div>
-                <p class="instruction">Add a dummy API key under the base_url.</p>
-                
-                <div class="code-window">
-                    <div class="code-header">Terminal / Configuration</div>
-                    <pre>  api_key: sk-dummy-key-not-used</pre>
-                </div>
-            </div>
-        </div>
-
-        <div class="step">
-            <div class="step-number">20</div>
-            <div class="card">
-                <h2>Defining Context Lengths</h2>
-                <div class="story-text">Although our Modelfile forces 65k, Hermes needs to know it's allowed to send that much text in its internal UI token counter.</div>
-                <p class="instruction">Update the context parameters to match our Modelfile exactly.</p>
-                
-                <div class="code-window">
-                    <div class="code-header">Terminal / Configuration</div>
-                    <pre>  ollama_num_ctx: 65536
-  context_length: 65536</pre>
-                </div>
-            </div>
-        </div>
-
-        <div class="step">
-            <div class="step-number">21</div>
-            <div class="card">
-                <h2>Updating the Delegation Model</h2>
-                <div class="story-text">This is where most novices fail. Hermes spawns invisible background agents to do research. If you don't update them, they crash.</div>
-                <p class="instruction">Scroll down to the 'delegation:' block.</p>
-                
-            </div>
-        </div>
-
-        <div class="step">
-            <div class="step-number">22</div>
-            <div class="card">
-                <h2>Syncing the Sub-Agents</h2>
-                <div class="story-text">We force the background researchers to use the exact same unbottlenecked alias as the main chat window.</div>
-                <p class="instruction">Update the delegation model string.</p>
-                
-                <div class="code-window">
-                    <div class="code-header">Terminal / Configuration</div>
-                    <pre>delegation:
-  model: hermes-gemma-4-12b
-  provider: ollama</pre>
-                </div>
-            </div>
-        </div>
-
-        <div class="step">
-            <div class="step-number">23</div>
-            <div class="card">
-                <h2>Configuring the File Editor Tool</h2>
-                <div class="story-text">Hermes uses a specific sub-agent to edit massive files. It needs our new model to handle thousands of lines of diffs.</div>
-                <p class="instruction">Scroll to the 'tool_agent:' block (if it exists) and update its model.</p>
-                
-                <div class="code-window">
-                    <div class="code-header">Terminal / Configuration</div>
-                    <pre>tool_agent:
-  model: hermes-gemma-4-12b</pre>
-                </div>
-            </div>
-        </div>
-
-        <div class="step">
-            <div class="step-number">24</div>
-            <div class="card">
-                <h2>Saving the Configuration</h2>
-                <div class="story-text">The genetic modifications are complete. The brain stem is rewritten.</div>
-                <p class="instruction">Save config.yaml and close your text editor.</p>
-                
-            </div>
-        </div>
-
-        <div class="step">
-            <div class="step-number">25</div>
-            <div class="card">
-                <h2>Booting the Hermes App</h2>
-                <div class="story-text">We awaken the UI. It will now read the configuration and lock onto our local Ollama instance.</div>
-                <p class="instruction">Double-click the Hermes Windows App icon on your desktop.</p>
-                
-            </div>
-        </div>
-
-        <div class="step">
-            <div class="step-number">26</div>
-            <div class="card">
-                <h2>Verifying the UI Connection</h2>
-                <div class="story-text">The bottom right corner of Hermes should now proudly display your custom alias.</div>
-                <p class="instruction">Look at the model selector in the UI. It should say 'hermes-gemma-4-12b (ollama)'.</p>
-                
-            </div>
-        </div>
-
-        <div class="step">
-            <div class="step-number">27</div>
-            <div class="card">
-                <h2>The Stress Test</h2>
-                <div class="story-text">True heroes test their limits. We throw a massive query at the model to ensure the 65k context holds.</div>
-                <p class="instruction">In the Hermes chat, paste a massive block of code or an entire essay and ask it to summarize.</p>
-                
-            </div>
-        </div>
-
-        <div class="step">
-            <div class="step-number">28</div>
-            <div class="card">
-                <h2>Monitoring Hardware (Optional)</h2>
-                <div class="story-text">Watch your machine seamlessly handle the load. Your 12GB VRAM will max out, and the rest will spill flawlessly to your 64GB System RAM.</div>
-                <p class="instruction">Open Task Manager (Ctrl+Shift+Esc) and watch the Performance tab during generation.</p>
-                
-            </div>
-        </div>
-
-        <div class="step">
-            <div class="step-number">29</div>
-            <div class="card">
-                <h2>Testing the Sub-Agents</h2>
-                <div class="story-text">We must verify that Hermes can delegate tasks successfully without crashing.</div>
-                <p class="instruction">Ask Hermes: 'Please spawn a sub-agent to write a python script for me.' Watch the delegation succeed.</p>
-                
-            </div>
-        </div>
-
-        <div class="step">
-            <div class="step-number">30</div>
-            <div class="card">
-                <h2>Ascension Complete</h2>
-                <div class="story-text">You have transcended. You are no longer bound by artificial API bottlenecks. You possess a limitless, uncensored local supercomputer.</div>
-                <p class="instruction">Enjoy the power of the true Antigravity stack. There are no more limits.</p>
-                
-            </div>
-        </div>
+        <section>
+            <h2>💎 Troubleshooting</h2>
+            <ul>
+                <li><strong>Out of Memory / Crashing:</strong> Check the Ollama logs for errors related to out-of-memory or context truncation. Run <code>OLLAMA_DEBUG=1 ollama serve</code> to see detailed logs.</li>
+                <li><strong>Slow Performance:</strong> Use <code>ollama ps</code> to monitor your model's memory usage. It will show you if the model is fully loaded on your GPU or if it has spilled over to your CPU (which drastically slows down generation).</li>
+                <li><strong>Persistent Issues:</strong> Consider using a smaller model (e.g., moving from a 12B to an 8B/7B) or a highly quantized version to free up more VRAM for the context cache.</li>
+            </ul>
+        </section>
 
     </div>
 
     <footer>
-        <p>// Built to eliminate wasted days. Mastercrafted by Antigravity AI. //</p>
+        <p>A sane, hype-free guide for real-world local AI deployments.</p>
     </footer>
 
-    <script>
-        const observerOptions = {
-            root: null,
-            rootMargin: '0px',
-            threshold: 0.2
-        };
-
-        const observer = new IntersectionObserver((entries, observer) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
-                    observer.unobserve(entry.target);
-                }
-            });
-        }, observerOptions);
-
-        document.querySelectorAll('.step').forEach(step => {
-            observer.observe(step);
-        });
-    </script>
 </body>
 </html>

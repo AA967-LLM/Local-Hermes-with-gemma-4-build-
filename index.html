@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zero to Hero: Hermes + Gemma 4</title>
+    <title>Zero to Hero: The 30-Step Hermes Epic</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&family=Outfit:wght@700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
@@ -35,7 +35,7 @@
 
         /* Hero Section */
         .hero {
-            min-height: 90vh;
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -105,7 +105,6 @@
             position: relative;
         }
 
-        /* The vertical line */
         .timeline-wrapper::before {
             content: '';
             position: absolute;
@@ -113,7 +112,7 @@
             bottom: 5rem;
             left: 50px;
             width: 2px;
-            background: linear-gradient(to bottom, transparent, var(--primary), transparent);
+            background: linear-gradient(to bottom, transparent, var(--primary), var(--secondary), transparent);
         }
 
         .step {
@@ -130,7 +129,6 @@
             transform: translateY(0);
         }
 
-        /* The glowing dot */
         .step::before {
             content: '';
             position: absolute;
@@ -143,18 +141,27 @@
             border: 3px solid var(--primary);
             box-shadow: 0 0 15px var(--primary);
             z-index: 2;
+            transition: all 0.5s ease;
         }
 
-        /* The step number */
+        .step.visible::before {
+            background: var(--primary);
+        }
+
         .step-number {
             position: absolute;
-            left: 0;
-            top: 10px;
+            left: -10px;
+            top: 5px;
             font-family: 'Outfit', sans-serif;
             font-size: 2.5rem;
             font-weight: 900;
             color: rgba(255, 255, 255, 0.1);
             line-height: 1;
+            transition: color 0.5s ease;
+        }
+
+        .step.visible .step-number {
+            color: rgba(0, 242, 254, 0.3);
         }
 
         .card {
@@ -166,6 +173,12 @@
             box-shadow: 0 20px 40px rgba(0,0,0,0.5);
             position: relative;
             overflow: hidden;
+            transition: transform 0.3s ease, border-color 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: scale(1.02);
+            border-color: rgba(255,255,255,0.2);
         }
 
         .card::after {
@@ -179,22 +192,23 @@
         .card h2 {
             font-family: 'Outfit', sans-serif;
             font-size: 2rem;
-            margin-bottom: 1rem;
+            margin-bottom: 0.5rem;
             color: #fff;
         }
-
-        .card p {
+        
+        .story-text {
+            color: var(--secondary);
+            font-style: italic;
+            font-size: 1rem;
             margin-bottom: 1.5rem;
-            font-size: 1.1rem;
+            border-left: 3px solid var(--secondary);
+            padding-left: 1rem;
         }
 
-        .alert-box {
-            background: rgba(255, 60, 60, 0.1);
-            border-left: 4px solid #ff3c3c;
-            padding: 1.5rem;
-            border-radius: 0 12px 12px 0;
-            margin: 2rem 0;
-            font-size: 0.95rem;
+        .card p.instruction {
+            margin-bottom: 1.5rem;
+            font-size: 1.1rem;
+            color: #ddd;
         }
 
         /* Code Blocks */
@@ -202,7 +216,7 @@
             background: var(--code-bg);
             border: 1px solid var(--border);
             border-radius: 12px;
-            margin: 2rem 0;
+            margin: 1.5rem 0 0 0;
             overflow: hidden;
         }
 
@@ -233,11 +247,6 @@
             color: #e0e0e0;
         }
 
-        .keyword { color: #ff7b72; }
-        .string { color: #a5d6ff; }
-        .comment { color: #8b949e; font-style: italic; }
-        .value { color: #79c0ff; }
-
         @media (max-width: 768px) {
             .timeline-wrapper::before { left: 30px; }
             .step { padding-left: 60px; }
@@ -260,115 +269,18 @@
 <body>
 
     <section class="hero">
-        <div class="hero-badge">0 to Hero Guide</div>
-        <h1>The Unbottlenecked<br>Local AI Stack</h1>
-        <p>You shouldn't have to waste your entire day debugging context limits. Here is the definitive, total-novice guide to flawlessly linking the Hermes App, Ollama, and Gemma 4.</p>
+        <div class="hero-badge">30-Step Masterclass</div>
+        <h1>Zero to Hero:<br>The Antigravity Epic</h1>
+        <p>A completely unbroken, hand-holding masterclass. 30 detailed steps narrating exactly how to shatter the Ollama context ceiling and permanently fuse Gemma 4 to the Hermes Agent.</p>
+        <p style="font-size: 0.9rem; margin-top: 2rem; opacity: 0.5;">Scroll to begin the journey ↓</p>
     </section>
 
     <div class="timeline-wrapper">
 
-        <!-- Step 1 -->
-        <div class="step">
-            <div class="step-number">01</div>
-            <div class="card">
-                <h2>The Setup: Getting the Engine</h2>
-                <p>Before we can remove the bottlenecks, you need the base model. We are using <strong>Gemma-4-12B</strong>—an incredibly smart, uncensored model that fits perfectly into 12GB VRAM while overflowing safely into your 64GB of System RAM.</p>
-                
-                <div class="code-window">
-                    <div class="code-header">Terminal / Command Prompt</div>
-                    <pre><span class="comment"># Pull the base model down to your machine</span>
-ollama run igorls/gemma-4-12B-it-heretic-GGUF:latest</pre>
-                </div>
-                <p style="font-size: 0.9rem; color: var(--muted);"><em>Once it finishes downloading, you can type "/bye" to exit. We don't want to run it like this—we want to superpower it first.</em></p>
-            </div>
-        </div>
-
-        <!-- Step 2 -->
-        <div class="step">
-            <div class="step-number">02</div>
-            <div class="card">
-                <h2>The Problem: The Silent Chokehold</h2>
-                <p>Hermes communicates with Ollama using an "API endpoint". Unfortunately, this endpoint has a fatal flaw: <strong>it silently ignores context limits</strong> and crushes your model down to a tiny 4,096 tokens. If you paste a large document, the AI will abruptly cut off.</p>
-                <div class="alert-box">
-                    <strong>The Fix:</strong> We bypass the API completely. By creating a physical "Modelfile" (a configuration blueprint), we hardcode the maximum limits directly into the model's DNA.
-                </div>
-            </div>
-        </div>
-
-        <!-- Step 3 -->
-        <div class="step">
-            <div class="step-number">03</div>
-            <div class="card">
-                <h2>The Solution: Building the Alias</h2>
-                <p>Create a blank text file on your desktop and name it exactly <code>Modelfile</code> (no .txt extension). Paste the following code into it exactly as written:</p>
-                
-                <div class="code-window">
-                    <div class="code-header">Modelfile</div>
-                    <pre><span class="keyword">FROM</span> igorls/gemma-4-12B-it-heretic-GGUF:latest
-
-<span class="comment"># 1. Force the absolute maximum 65,536 context window</span>
-<span class="keyword">PARAMETER</span> num_ctx <span class="value">65536</span>
-
-<span class="comment"># 2. Set to -1 to disable artificial generation cut-offs</span>
-<span class="keyword">PARAMETER</span> num_predict <span class="value">-1</span>
-
-<span class="comment"># 3. Force all layers to GPU to maximize your 12GB VRAM</span>
-<span class="keyword">PARAMETER</span> num_gpu <span class="value">999</span></pre>
-                </div>
-
-                <p>Now, open your terminal, navigate to your desktop, and tell Ollama to compile this blueprint into a brand new, unbottlenecked model named <code>hermes-gemma-4-12b</code>:</p>
-                
-                <div class="code-window">
-                    <div class="code-header">Terminal / Command Prompt</div>
-                    <pre>ollama create hermes-gemma-4-12b -f ./Modelfile</pre>
-                </div>
-            </div>
-        </div>
-
-        <!-- Step 4 -->
-        <div class="step">
-            <div class="step-number">04</div>
-            <div class="card">
-                <h2>The Fusion: Tying it to Hermes</h2>
-                <p>You now have a limitless AI engine. Finally, we must plug it into the Hermes Windows App and CLI so they are "tied at the hip".</p>
-                <p>Open your Hermes configuration file located at <code>C:\Users\YourName\AppData\Local\hermes\config.yaml</code>.</p>
-
-                <p>Find the <strong>primary model</strong> section and update it to our new alias:</p>
-                <div class="code-window">
-                    <div class="code-header">config.yaml (Section 1)</div>
-                    <pre>model:
-  default: <span class="string">hermes-gemma-4-12b</span>
-  provider: <span class="string">ollama</span>
-  base_url: <span class="string">http://localhost:11434/v1</span>
-  ollama_num_ctx: <span class="value">65536</span>
-  context_length: <span class="value">65536</span></pre>
-                </div>
-
-                <p>Crucially, scroll down and find the <strong>delegation</strong> section. Hermes spawns "sub-agents" to do background research. If you don't update this, the background agents will crash.</p>
-                <div class="code-window">
-                    <div class="code-header">config.yaml (Section 2)</div>
-                    <pre>delegation:
-  model: <span class="string">hermes-gemma-4-12b</span>
-  provider: <span class="string">ollama</span>
-  base_url: <span class="string">http://localhost:11434/v1</span></pre>
-                </div>
-            </div>
-        </div>
-
-        <!-- Step 5 -->
-        <div class="step">
-            <div class="step-number">05</div>
-            <div class="card" style="border-color: var(--primary); box-shadow: 0 0 40px rgba(0, 242, 254, 0.15);">
-                <h2 style="color: var(--primary);">You are now a Hero.</h2>
-                <p>Restart Hermes. You now possess a fully local, 100% uncensored AI stack capable of injesting tens of thousands of lines of code without hallucinating or abruptly stopping. </p>
-                <p style="margin-top: 1rem; color: var(--muted);">Welcome to the true Antigravity experience.</p>
-            </div>
-        </div>
-
     </div>
 
     <footer>
-        <p>// Built to eliminate wasted days. Local execution only. //</p>
+        <p>// Built to eliminate wasted days. Mastercrafted by DeepSeek & Antigravity. //</p>
     </footer>
 
     <script>
